@@ -1,7 +1,7 @@
 FROM openjdk:8
-ADD ./build/distributions/crypto-400.tar /usr/src/
-COPY ./keys /usr/src/crypto-400/keys
+ADD ./build/distributions/pq-messenger.tar /usr/src/
+COPY ./keys /usr/src/pq-messenger/keys
 
-WORKDIR /usr/src/crypto-400
-CMD ["./bin/crypto-400", "start", "-keysdir", "./keys"]
+WORKDIR /usr/src/pq-messenger
+CMD ["./bin/pq-messenger", "start", "-keysdir", "./keys"]
 
