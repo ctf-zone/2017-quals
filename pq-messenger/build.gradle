@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'task.Main'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.bouncycastle:bcprov-jdk15on:1.57'
+    compile 'com.typesafe.akka:akka-actor_2.11:2.5.2'
+    compile 'com.beust:jcommander:1.72'
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
+
+jar {
+    baseName = 'task'
+}
