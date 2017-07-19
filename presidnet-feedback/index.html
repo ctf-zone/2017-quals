@@ -1,0 +1,103 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"> </script>
+<script>
+    function generate() {
+        $("#msg").empty()
+        ws.send(JSON.stringify({"method": "generate"}))
+    }
+    function validate() {
+        hash = $("pre").attr("id")
+        ws.send(JSON.stringify({"method": "check", "args": [hash, $("#answer").val()]}))
+    }
+    function createWebSocket(path) {
+        var protocolPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
+        return new WebSocket(protocolPrefix + '//' + location.host + path);
+    }
+
+
+    ws = createWebSocket(location.pathname + "feed");
+    ws.onopen = function() { generate()};
+     
+    ws.onmessage = function(evt) { 
+        data = JSON.parse(evt.data)
+        if (data["status"] == "error") {
+            alert(data["info"])
+        } else  if (data["method"] == "generate") {
+            $("#msg").append("<pre id=" + data["result"]["hash"] + ">"+ data["result"]["text"] + "</pre>"); 
+        } else if (data["method"] == "check") {
+            if (data["result"] == "Valid") {
+                $("#submitBtn").prop('disabled', false);
+            }
+            alert(data["result"]);
+            generate();
+        }
+        else if (data["method"] == "help") {
+            alert(data["result"]);
+        }
+    };
+</script>
+</head>
+<body>
+     <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Contact us</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="container theme-showcase" role="main">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Contact Mr.Future President</h3>
+                    </div>
+                    <form action="/dev/null" method="POST">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="firstname">Firstname:</label>
+                                <input placeholder="Firstname" class="form-control" id="firstname">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">Lastname:</label>
+                                <input placeholder="Lastname" class="form-control" id="lastname">
+                            </div>
+                            <div class="form-group">
+                                <label for="quest">Your question:</label>
+                                <textarea class="form-control" id="quest">
+                                </textarea>
+                            </div>
+                            <label for="quest">Captcha:</label>
+                            <div class="form-group">    
+                                <div class="theme-showcase" role="main" id="msg">
+                                </div>
+                                
+                                <div class="form-inline">
+                                    <label for="answer">Answer:</label>
+                                    <input class="form-control" type="text" id="answer">
+                                    <input class="btn btn-primary" type="button" value="Generate" onclick="generate()">
+                                    <input class="btn btn-primary" type="button" value="Validate" onclick="validate()">
+                                </div>
+                            </div>
+                            <input class="btn btn-success" type="submit" value="Submit" id="submitBtn" disabled>
+                        </div>
+                    </form>
+                </div>    
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
