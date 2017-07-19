@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-6">
+        <form action="" method="POST" id="loginform">
+            <p><pre class="bg-info">Email will be generated and sent with following parametrs</pre></p>
+            <p>Destination: <input type="text" class="form-control" readonly="readonly" value="admin@mrfuture.president"></p>
+            <p>Subject: <input type="text" class="form-control" name="subject" value="<?= $subject ?>" ></p>
+            <p>Encoding: <input type="text" class="form-control" readonly="readonly" name="encoding" value="UTF-8" ></p>
+            
+            <p><input type="submit" class="btn btn-success" form="loginform"  value="Send" ></p>
+            <?php if ($this->sent === "yes"): ?>
+                <pre class="bg-success">Email was sent</pre>
+            <?php endif;?>
+            <?php if ($this->sent === "no"): ?>
+                <pre class="bg-danger">Email was not sent</pre>
+            <?php endif;?>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-md-6">
+        <form action="" method="POST" id="loginform">
+            <p>Login:</p>
+            <p><input type="text" class="form-control" name="login"></p>
+            <p>Password:</p>
+            <p><input type="password" class="form-control" name="password"></p>
+            <p><input type="submit" class="btn btn-success" form="loginform"  value="Login" ></p>
+            <?php if ($this->error): ?>
+                <pre class="bg-danger">Wrong password</pre>
+            <?php endif;?>
+        </form>
+    </div>
+</div>
